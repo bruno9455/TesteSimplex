@@ -70,7 +70,7 @@ public class Escrever {
 
                 }
                 tamLin = tempp.length();
-                if (linha == 0) {
+                if (linha == 1) {
                     for (int k = 0; k < tamLin + 1; k++) {
                         System.out.printf("-");
                         printWriter.printf("-");
@@ -124,7 +124,7 @@ public class Escrever {
 
                 }
                 tamLin = tempp.length();
-                if (linha == 0 || linha == 1 || linha == 2) {
+                if ( linha == 1 || linha == 2) {
                     for (int k = 0; k < tamLin + 1; k++) {
                         System.out.printf("-");
                         printWriter.printf("-");

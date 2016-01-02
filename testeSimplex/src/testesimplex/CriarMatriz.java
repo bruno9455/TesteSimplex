@@ -7,7 +7,6 @@ package testesimplex;
 
 import java.util.Formatter;
 
-
 /**
  *
  * @author bruno
@@ -16,6 +15,7 @@ public class CriarMatriz {
 
     public final static String[] MAIOR_OU_IGUAL = {">=", "=>", "\u2265", "\u2267"};
     public final static String[] MENOR_OU_IGUAL = {"<=", "=<", "\u2264", "\u2266"};
+    public final static String[] OPERADOR = {"+", "-", "*", "/"};
     public final static char IGUAL = '=';
     public final static char MENOS = '-';
     public final static char MAIS = '+';
@@ -64,10 +64,8 @@ public class CriarMatriz {
                 //</editor-fold>
                 //<editor-fold desc="B">
                 linhaParaMatriz[nColunas - 1] = getB(linha);
-                
-                
-                //</editor-fold>
 
+                //</editor-fold>
                 matrizInicial[i] = linhaParaMatriz;
 
             }
@@ -113,10 +111,10 @@ public class CriarMatriz {
         if (index != -1) {
 
             output = Double.parseDouble(linha.substring(index).trim());
-            if ( output<0){
+            if (output < 0) {
                 System.out.printf("É preciso verificar os b's,\npois não podem ser menores que 0\n");
                 System.exit(0);
-                
+
             }
         } else {
             output = 0;
@@ -169,20 +167,20 @@ public class CriarMatriz {
                 indexInicial = index + variaveis[i][0].length();
 
                 if (temp.matches(".*\\d+.*")) {
- 
-                    output[i] += Double.parseDouble(temp);
+
+                    output[i] = Double.parseDouble(temp);
                 } else {
 
                     if (temp.contains("-")) {
-                        output[i] += -1;
+                        output[i] = -1;
 
                     } else {
-                        output[i] += 1;
+                        output[i] = 1;
 //                        }
 //
                     }
                 }
-                
+
 //                }
             } else {
                 output[i] = 0;
@@ -271,6 +269,24 @@ public class CriarMatriz {
         return output;
     }
 
+    public static boolean valorDaVariavelTerminou(char caracter, int index) {
+
+        boolean output = true;
+
+        String car = String.valueOf(caracter);
+
+        boolean eOperador = false;
+
+        for (String OPERADOR1 : OPERADOR) {
+            if (car.equals(OPERADOR1) || index < 0) {
+                eOperador = true;
+                break;
+            }
+        }
+
+        return output;
+    }
+
     public static void extrairValorDaVariavel(int charIndex, String linha, String[][] variaveisEncontradas) {
 
         int ultimaVariavelEncontrada = variaveisEncontradas.length - 1;
@@ -291,7 +307,7 @@ public class CriarMatriz {
 
             carater = linha.charAt(idx);
 
-            while (!nomeDaVariavelTerminou(carater)) {
+            while ((!valorDaVariavelTerminou(carater, idx))) {
 
                 carater = linha.charAt(idx);
 
@@ -311,34 +327,34 @@ public class CriarMatriz {
             operador = "-";
         }
 
-        output[0] = numero;
+        output[0] = numero.replaceAll(" ","");
         output[1] = operador;
         return output;
     }
 
-    public static String[][] criarMatrizString(double[][] matrizSimplexD, String[]linhas) {
-        String[][]matrizSimplexS= new String[matrizSimplexD.length+1][matrizSimplexD[0].length+1];
+    public static String[][] criarMatrizString(double[][] matrizSimplexD, String[] linhas) {
+        String[][] matrizSimplexS = new String[matrizSimplexD.length + 1][matrizSimplexD[0].length + 1];
         String[][] variaveisDaPrimeiraLinha = getVariaveisDaPrimeiraLinha((linhas[0]));
         for (int i = 1; i < matrizSimplexS.length; i++) {
             for (int j = 1; j < matrizSimplexS[0].length; j++) {
-                matrizSimplexS[i][j]=String.format("%8.2f|", matrizSimplexD[i-1][j-1]);
+                matrizSimplexS[i][j] = String.format("%8.2f|", matrizSimplexD[i - 1][j - 1]);
             }
-            matrizSimplexS[0][0]="";
-            matrizSimplexS[1][0]="Z ";
-            matrizSimplexS[0][matrizSimplexS[0].length-1]="b  ";
+            matrizSimplexS[0][0] = "";
+            matrizSimplexS[1][0] = "Z ";
+            matrizSimplexS[0][matrizSimplexS[0].length - 1] = "b  ";
         }
-        for (int i=2; i<matrizSimplexS.length;i++){
-            matrizSimplexS[i][0]=String.format("f%d ",i-1);
+        for (int i = 2; i < matrizSimplexS.length; i++) {
+            matrizSimplexS[i][0] = String.format("f%d ", i - 1);
         }
-        
-        for(int i=1;i<variaveisDaPrimeiraLinha.length+1;i++){
-            matrizSimplexS[0][i]=String.format("%s ",variaveisDaPrimeiraLinha[i-1][0]);
+
+        for (int i = 1; i < variaveisDaPrimeiraLinha.length + 1; i++) {
+            matrizSimplexS[0][i] = String.format("%s ", variaveisDaPrimeiraLinha[i - 1][0]);
         }
-        
-        for(int i =variaveisDaPrimeiraLinha.length+1; i <matrizSimplexS[0].length-1;i++){
-            matrizSimplexS[0][i]=String.format("f%d ",i-variaveisDaPrimeiraLinha.length);
+
+        for (int i = variaveisDaPrimeiraLinha.length + 1; i < matrizSimplexS[0].length - 1; i++) {
+            matrizSimplexS[0][i] = String.format("f%d ", i - variaveisDaPrimeiraLinha.length);
         }
-        
+
         return matrizSimplexS;
     }
 
